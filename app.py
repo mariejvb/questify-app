@@ -6,7 +6,7 @@ import os
 import json
 import random
 import google.generativeai as genai
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -49,6 +49,10 @@ except Exception as e:
 # =================================
 #  3. API ENDPOINTS
 # =================================
+
+@app.route('/')
+def index():
+    return send_from_directory('../', 'index.html')
 
 # --- ENDPOINT 1: GENERATE THE INITIAL LIST OF QUESTS ---
 # Defines the route for generating a new set of tasks for a main goal.
