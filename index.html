@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!-- The 'lang' attribute helps screen readers and search engines understand the page's primary language. -->
+<html lang="en">
+
+<head>
+    <!-- Sets the character encoding to UTF-8 to ensure all text and symbols display correctly across different languages. -->
+    <meta charset="UTF-8">
+    <!-- The viewport meta tag is crucial for responsive design, ensuring the site scales correctly on mobile devices. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- The title of the application, which appears in the browser tab. -->
+    <title>Questify</title>
+
+    <!-- Links the external stylesheet (style.css) that controls all visual presentation. -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class.="top-nav">
+        <div class="nav-content">
+            <!-- <a href="index.html" class="nav-brand">Q</a> -->
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active">Quests</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- This is the clickable handle for toggling the sidebar's visibility. 
+         It is a direct child of the <body> so that it remains visible even when the sidebar itself is hidden. -->
+    <div id="quest-log-toggle" class="log-toggle-button">
+        <!-- A text label for the toggle handle, styled vertically with CSS. -->
+        <span class="toggle-text">Q U E S T L O G</span>
+        <!-- The arrow icon (caret) that rotates to indicate the sidebar's state (open/closed). -->
+        <span id="quest-log-caret" class="caret"></span>
+    </div>
+
+    <!-- This is the container for the collapsible sidebar, which serves as the Quest Log. -->
+    <div id="quest-log-container" class="quest-log-container">
+        <h2>Quest Log</h2>
+        <!-- This inner div groups the log's content for easier styling and manipulation. -->
+        <div id="quest-log-content">
+            <!-- An empty container where JavaScript will dynamically inject the list of active quests. -->
+            <div id="quest-log-list"></div>
+            <!-- A simple horizontal rule to visually separate the active and completed quest sections. -->
+            <hr class="quest-separator">
+            <h3 class="completed-title">Completed</h3>
+            <!-- An empty container where JavaScript will dynamically inject the list of completed quests. -->
+            <div id="completed-quests-list"></div>
+        </div>
+    </div>
+
+    <!-- The main content area of the application. -->
+    <main id="main-content">
+        <!-- An inner '.container' class is used to apply a max-width and center the main content on wider screens. -->
+        <div class="container">
+            <!-- The application's primary heading and tagline. -->
+            <h1>Questify</h1>
+            <p class="tagline">Your life is the game. Grind for the XP that matters.</p>
+
+            <!-- The input form for adding a new goal. -->
+            <div class="goal-input-container">
+                <input type="text" id="goal-input" placeholder="What’s your goal?">
+                <button id="submit-goal">Add New Quest</button>
+            </div>
+
+            <!-- This container will display the currently selected quest's details. -->
+            <div id="active-quest-view">
+                <!-- An empty h2 where JavaScript will place the active goal's title. -->
+                <h2 id="current-goal-display"></h2>
+                <!-- An empty div where JavaScript will render the list of mini-tasks for the active quest. -->
+                <div id="quests-container"></div>
+            </div>
+
+            <!-- This section displays the global player stats: Level and XP. -->
+            <div class="stats-container">
+                <div class="level-display">Level: <span id="level">1</span></div>
+                <div class="progress-bar-container">
+                    <!-- The inner progress bar, whose width will be controlled by JavaScript to show XP progress. -->
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <!-- The XP text display. The entire string is within the span so JS can easily replace it with dynamic values. -->
+                <div class="xp-display">XP: <span id="xp-count">0 / 100</span></div>
+            </div>
+
+            <!-- A button to trigger the full progress reset functionality. -->
+            <button id="reset-progress-button" class="reset-button">Reset All Progress</button>
+        </div>
+    </main>
+
+    <!-- The pop-up modal for notifications like "Level Up!" and "Goal Achieved!". 
+         It is hidden by default using the '.hidden' CSS class. -->
+    <div id="level-up-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <!-- The modal's title, which will be dynamically changed by JavaScript. -->
+            <h2 id="modal-title">Level Up!</h2>
+            <!-- The modal's message, also controlled by JavaScript. -->
+            <p id="modal-message"></p>
+            <button id="modal-close-button">Continue</button>
+        </div>
+    </div>
+
+    <!-- The main JavaScript file is linked at the end of the body.
+         This is best practice, as it ensures all HTML elements above are loaded into the DOM and ready to be manipulated before the script runs. -->
+    <script src="script.js"></script>
+</body>
+
+</html>

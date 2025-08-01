@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!-- The 'lang' attribute helps screen readers and search engines understand the page's primary language. -->
+<html lang="en">
+
+<head>
+    <!-- Sets the character encoding to UTF-8 to ensure all text and symbols display correctly across different languages. -->
+    <meta charset="UTF-8">
+    <!-- The viewport meta tag is crucial for responsive design, ensuring the site scales correctly on mobile devices. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- The title of the application, which appears in the browser tab. -->
+    <title>Questify</title>
+
+    <!-- Links the external stylesheet (style.css) that controls all visual presentation. -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class.="top-nav">
+        <div class="nav-content">
+            <!-- <a href="index.html" class="nav-brand">Q</a> -->
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Quest</a>
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- The main content area of the application. -->
+    <main id="main-content">
+        <div class="container">
+            <!-- A grid to neatly display our statistic cards. -->
+            <div class="stats-grid">
+                <!-- Card for Current Level -->
+                <div class="stat-card">
+                    <div id="level-stat" class="stat-value">--</div>
+                    <div class="stat-label">Current Level</div>
+                </div>
+                <!-- Card for Total Quests Completed -->
+                <div class="stat-card">
+                    <div id="quests-completed-stat" class="stat-value">--</div>
+                    <div class="stat-label">Quests Completed</div>
+                </div>
+                <!-- Card for Total Tasks Completed -->
+                <div class="stat-card">
+                    <div id="tasks-completed-stat" class="stat-value">--</div>
+                    <div class="stat-label">Tasks Completed</div>
+                </div>
+                <!-- Card for Lifetime XP Earned -->
+                <div class="stat-card">
+                    <div id="total-xp-stat" class="stat-value">--</div>
+                    <div class="stat-label">Lifetime XP Earned</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- The pop-up modal for notifications like "Level Up!" and "Goal Achieved!". 
+         It is hidden by default using the '.hidden' CSS class. -->
+    <div id="level-up-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <!-- The modal's title, which will be dynamically changed by JavaScript. -->
+            <h2 id="modal-title">Level Up!</h2>
+            <!-- The modal's message, also controlled by JavaScript. -->
+            <p id="modal-message"></p>
+            <button id="modal-close-button">Continue</button>
+        </div>
+    </div>
+
+    <!-- The main JavaScript file is linked at the end of the body.
+         This is best practice, as it ensures all HTML elements above are loaded into the DOM and ready to be manipulated before the script runs. -->
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

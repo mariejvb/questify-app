@@ -1,0 +1,584 @@
+/* =================================
+   1. GLOBAL STYYLES & VARIABLES
+   ================================= */
+body {
+  /* Sets the default font for the entire application. Using a system font stack is a safe fallback. */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #1a1a1a; /* A dark charcoal for the main background. */
+  color: #f0f0f0; /* A slightly off-white for all text for better readability. */
+  margin: 0; /* Removes the default browser margin. */
+  overflow-x: hidden; /* Prevents horizontal scrollbars, especially during sidebar animations. */
+  padding-top: 15px;
+}
+
+/* =================================
+   2. TOP NAVIGATION BAR
+   ================================= */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #2a2a2a;
+  border-bottom: 1px solid #444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.nav-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2em;
+}
+
+.nav-brand {
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 1.5rem;
+  color: #4dff91;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5em;
+}
+
+.nav-link {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5em 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #fff;
+}
+
+.nav-link.active {
+  color: #4dff91;
+  border-bottom-color: #4dff91;
+}
+
+/* =================================
+   2. APP LAYOUT & SLIDING SIDEBAR
+   ================================= */
+#quest-log-container {
+  /* The sidebar is fixed, meaning it stays in place even if the main content scrolls. */
+  position: fixed;
+  left: 0;
+  top: 60px;
+  height: calc(100vh - 60px); /* Ensures the sidebar is always the full height of the browser window. */
+  background-color: #2a2a2a; /* A slightly lighter dark gray for containers. */
+  padding: 1.5em;
+  width: 300px;
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3); /* A subtle shadow to give it depth. */
+  transform: translateX(0); /* The default, "open" position. */
+  transition: transform 0.4s ease; /* A smooth animation for the slide-in/slide-out effect. */
+  z-index: 100; /* Ensures the sidebar is on top of other content. */
+}
+
+.log-toggle-button {
+  position: fixed;
+  left: 300px; /* Aligns with the edge of the open sidebar panel. */
+  top: 50%;
+  transform: translateY(-50%); /* A classic trick to vertically center the button. */
+  width: 30px;
+  height: 120px;
+  background-color: #2a2a2a;
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+  transition: left 0.4s ease; /* Animate its position to match the sidebar. */
+  z-index: 101; /* Must be on top of the sidebar itself. */
+}
+
+#main-content {
+  /* The main content area has a left margin to make space for the sidebar. */
+  margin-left: 350px;
+  padding: calc(2em + 60px) 2em 2em;;
+  transition: margin-left 0.4s ease; /* This animation is key for the content to smoothly fill the space. */
+}
+
+.container {
+  /* This inner container limits the width of the main content on large screens for readability. */
+  max-width: 800px;
+  margin: 0 auto; /* This centers the container within the #main-content area. */
+}
+
+.toggle-text {
+  /* This CSS creates the vertical text label on the sidebar handle. */
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  color: #ccc;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.caret {
+  /* This creates a simple arrow icon using CSS borders. */
+  border: solid #f0f0f0;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 4px;
+  transform: rotate(135deg); /* Default state points Left. */
+  transition: transform 0.3s ease;
+}
+
+/* --- Collapsed State --- */
+body.log-collapsed #quest-log-container {
+  transform: translateX(-100%); /* Slides the panel completely off-screen to the left. */
+}
+
+body.log-collapsed .log-toggle-button {
+  left: 0; /* Moves the handle to the edge of the screen. */
+}
+
+body.log-collapsed #main-content {
+  margin-left: 50px; /* When collapsed, the content only needs space for the handle. */
+}
+
+body.log-collapsed .caret {
+  transform: rotate(-45deg); /* Rotates the arrow to point Right. */
+}
+
+/* =================================
+   3. QUEST LOG CONTENT
+   ================================= */
+.quest-log-container h2 {
+  text-align: center;
+  color: #4dff91; /* The brand's accent color. */
+  margin-top: 0;
+}
+
+.quest-log-list,
+.completed-quests-list {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em; /* Spacing between quest log items. */
+}
+
+.quest-log-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  
+  background-color: #333;
+  padding: 1em;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.quest-log-text {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delete-quest-button {
+  background: none;
+  border: none;
+  color: #888;
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 5px;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.delete-quest-button:hover {
+  color: #ff6b6b;
+}
+
+.quest-log-item:hover {
+  border-color: #4dff91;
+}
+
+.quest-log-item.active {
+  background-color: #4dff91;
+  color: #1a1a1a;
+  font-weight: bold;
+}
+
+.quest-separator {
+  border: none;
+  border-top: 1px solid #444; /* A subtle line to divide sections. */
+  margin: 1.5em 0;
+}
+
+.completed-title {
+  text-align: center;
+  color: #888;
+  font-size: 1rem;
+  font-weight: normal;
+  margin-bottom: 1em;
+}
+
+.quest-log-item.completed {
+  opacity: 0.6;
+  text-decoration: line-through;
+  cursor: default; /* The cursor changes to show it's no longer clickable. */
+}
+
+.quest-log-item.completed::before {
+  content: '✅ '; /* The ::before pseudo-element is used to add the checkmark icon. */
+  margin-right: 5px;
+  text-decoration: none; /* Prevents the checkmark from being struck through. */
+  display: inline-block;
+}
+
+.quest-log-item.completed:hover {
+  border-color: transparent; /* Disables the hover effect for completed items. */
+}
+
+/* =================================
+   4. MAIN CONTENT ELEMENTS
+   ================================= */
+h1 {
+  font-family: "Silkscreen", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 3rem;
+  color: #4dff91;
+  margin-bottom: 0.1em;
+  text-align: center;
+}
+
+.tagline {
+  font-style: italic;
+  color: #b3b3b3;
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.goal-input-container {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+#goal-input {
+  flex-grow: 1; /* Allows the input to take up all available space. */
+  padding: 0.8em;
+  border: 2px solid #444;
+  border-radius: 8px 0 0 8px; /* Rounds only the left corners. */
+  background-color: #333;
+  color: #f0f0f0;
+  font-size: 1rem;
+}
+
+#submit-goal {
+  padding: 0.8em 1.5em;
+  border: none;
+  background-color: #4dff91;
+  color: #1a1a1a;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0 8px 8px 0; /* Rounds only the right corners. */
+  font-size: 1rem;
+}
+
+#submit-goal:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+#current-goal-display {
+  color: #cccccc;
+  font-style: italic;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  min-height: 1.5rem; /* Prevents the layout from shifting when the text appears. */
+  text-align: center;
+}
+
+/* =================================
+   5. INDIVIDUAL TASK ITEMS
+   ================================= */
+#quests-container {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.quest-item {
+  background-color: #333;
+  padding: 1em;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Aligns items to the top to handle multi-line text correctly. */
+}
+
+.quest-label-container {
+  display: flex;
+  align-items: center; /* Aligns the checkbox with the first line of text. */
+  flex-grow: 1;
+}
+
+.quest-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px; /* A small manual adjustment for perfect vertical alignment. */
+  margin-right: 1em;
+  flex-shrink: 0; /* Prevents the checkbox from shrinking. */
+}
+
+.quest-item label.completed {
+  text-decoration: line-through;
+  color: #888;
+}
+
+/* =================================
+   6. DIFFICULTY & REFRESH CONTROLS
+   ================================= */
+.difficulty-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #1a1a1a;
+  flex-shrink: 0;
+  margin-left: 1em;
+}
+
+.difficulty-easy { background-color: #63d471; }
+.difficulty-medium { background-color: #4dff91; }
+.difficulty-hard { background-color: #ffc700; }
+
+.difficulty-badge.completed {
+  opacity: 0.5;
+}
+
+.refresh-button {
+  background: none;
+  border: 1px solid #666;
+  color: #ccc;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 3px 8px;
+  margin-left: 1em;
+  transition: all 0.2s ease;
+}
+
+.refresh-button:hover {
+  background-color: #444;
+  border-color: #888;
+}
+
+.refresh-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =================================
+   7. STATS, PROGRESS & RESET
+   ================================= */
+.stats-container {
+  margin-top: 2em;
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* Level | Progress Bar | XP Count */
+  align-items: center;
+  gap: 1em;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 20px;
+  background-color: #444;
+  border-radius: 10px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #4dff91, #3ccf76);
+  transition: width 0.5s ease-in-out;
+  border-radius: 10px;
+}
+
+.reset-button {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 2em;
+  padding: 0.5em;
+  transition: color 0.2s ease;
+}
+
+.reset-button:hover {
+  color: #ff6b6b; /* A 'danger' red color on hover. */
+}
+
+/* =================================
+   8. LOADER & NOTIFICATIONS
+   ================================= */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  gap: 1em;
+}
+
+.loader {
+  border: 4px solid #555;
+  border-top: 4px solid #4dff91; /* The colored part of the spinner that creates the illusion of movement. */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite; /* Applies the spin animation. */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* Centers the toast horizontally. */
+  background-color: #4dff91;
+  color: #1a1a1a;
+  padding: 12px 25px;
+  border-radius: 20px;
+  font-weight: bold;
+  z-index: 1000;
+  animation: fade-in-out 3s ease-in-out; /* The animation makes it appear and disappear. */
+}
+
+.toast-bonus {
+  background: linear-gradient(90deg, #ffd700, #ffc700); /* A celebratory gold color. */
+  color: #1a1a1a;
+  box-shadow: 0 0 15px #ffd700;
+}
+
+.toast-bonus::before {
+  content: '⭐ ';
+  margin-right: 5px;
+}
+
+@keyframes fade-in-out {
+  0% { transform: translate(-50%, 100px); opacity: 0; } /* Start below screen */
+  15% { transform: translate(-50%, 0); opacity: 1; }  /* Fade and slide in */
+  85% { transform: translate(-50%, 0); opacity: 1; }  /* Stay on screen */
+  100% { transform: translate(-50%, 100px); opacity: 0; } /* Fade and slide out */
+}
+
+/* =================================
+   9. MODAL STYLES
+   ================================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background overlay. */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.modal-content {
+  background-color: #2a2a2a;
+  padding: 2em 3em;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transform: scale(0.7); /* Starts small for the animation. */
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay:not(.hidden) .modal-content {
+  transform: scale(1); /* Scales up to full size when shown. */
+}
+
+.modal-content h2 {
+  color: #4dff91;
+  font-size: 2.5rem;
+  margin-bottom: 0.5em;
+}
+
+#modal-close-button {
+  margin-top: 1em;
+  padding: 0.8em 2em;
+  border: none;
+  background-color: #4dff91;
+  color: #1a1a1a;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none; /* Prevents interaction with the modal when it's hidden. */
+}
+
+/* =================================
+   10. DASHBOARD PAGE STYLES
+   ================================= */
+
+/* A grid container to arrange the stat cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Creates a 2-column grid */
+  gap: 1.5em; /* The space between the cards */
+}
+
+/* Styling for each individual statistic card */
+.stat-card {
+  background-color: #333;
+  padding: 1.5em;
+  border-radius: 15px;
+  text-align: center;
+}
+
+/* The big, bold number in the card */
+.stat-value {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #4dff91;
+  margin-bottom: 0.1em;
+}
+
+/* The smaller text label below the number */
+.stat-label {
+  font-size: 1rem;
+  color: #ccc;
+}
