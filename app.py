@@ -53,7 +53,7 @@ except Exception as e:
 # --- ENDPOINT 1: GENERATE THE INITIAL LIST OF QUESTS ---
 # Defines the route for generating a new set of tasks for a main goal.
 # It only accepts POST requests.
-@app.route('/api/generate-quests', methods=['POST'])
+@app.route('/generate-quests', methods=['POST'])
 def generate_quests_endpoint():
     # First, check if the AI model was successfully initialized.
     if model is None:
@@ -98,7 +98,7 @@ def generate_quests_endpoint():
 
 # --- ENDPOINT 2: REFRESH A SINGLE QUEST ---
 # Defines the route for replacing a single unwanted task.
-@app.route('/api/refresh-quest', methods=['POST'])
+@app.route('/refresh-quest', methods=['POST'])
 def refresh_quest_endpoint():
     if model is None:
         return jsonify({"error": "AI model is not available."}), 503
