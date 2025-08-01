@@ -8,65 +8,6 @@ body {
   color: #f0f0f0; /* A slightly off-white for all text for better readability. */
   margin: 0; /* Removes the default browser margin. */
   overflow-x: hidden; /* Prevents horizontal scrollbars, especially during sidebar animations. */
-  padding-top: 15px;
-}
-
-/* =================================
-   2. TOP NAVIGATION BAR
-   ================================= */
-.top-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  background-color: #2a2a2a;
-  border-bottom: 1px solid #444;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.nav-content {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2em;
-}
-
-.nav-brand {
-  font-family: "Silkscreen", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 1.5rem;
-  color: #4dff91;
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.5em;
-}
-
-.nav-link {
-  color: #ccc;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 0.5em 0;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.nav-link:hover {
-  color: #fff;
-}
-
-.nav-link.active {
-  color: #4dff91;
-  border-bottom-color: #4dff91;
 }
 
 /* =================================
@@ -76,8 +17,8 @@ body {
   /* The sidebar is fixed, meaning it stays in place even if the main content scrolls. */
   position: fixed;
   left: 0;
-  top: 60px;
-  height: calc(100vh - 60px); /* Ensures the sidebar is always the full height of the browser window. */
+  top: 0;
+  height: 100vh; /* Ensures the sidebar is always the full height of the browser window. */
   background-color: #2a2a2a; /* A slightly lighter dark gray for containers. */
   padding: 1.5em;
   width: 300px;
@@ -108,7 +49,7 @@ body {
 #main-content {
   /* The main content area has a left margin to make space for the sidebar. */
   margin-left: 350px;
-  padding: calc(2em + 60px) 2em 2em;;
+  padding: 2em;
   transition: margin-left 0.4s ease; /* This animation is key for the content to smoothly fill the space. */
 }
 
@@ -177,13 +118,15 @@ body.log-collapsed .caret {
   align-items: center;
   justify-content: space-between;
   gap: 1em;
-  
   background-color: #333;
   padding: 1em;
   border-radius: 8px;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 2px solid transparent; /* A transparent border prevents the item from "jumping" when the colored border appears on hover. */
   transition: all 0.2s ease;
+  white-space: nowrap; /* Prevents long goal titles from wrapping. */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Adds "..." if the title is too long. */
 }
 
 .quest-log-text {
@@ -194,6 +137,7 @@ body.log-collapsed .caret {
 }
 
 .delete-quest-button {
+  /* NEW: Style for the delete button */
   background: none;
   border: none;
   color: #888;
@@ -208,7 +152,7 @@ body.log-collapsed .caret {
 }
 
 .delete-quest-button:hover {
-  color: #ff6b6b;
+  color: #ff6b6b; /* Danger red on hover */
 }
 
 .quest-log-item:hover {
@@ -548,37 +492,4 @@ h1 {
 .hidden {
   opacity: 0;
   pointer-events: none; /* Prevents interaction with the modal when it's hidden. */
-}
-
-/* =================================
-   10. DASHBOARD PAGE STYLES
-   ================================= */
-
-/* A grid container to arrange the stat cards */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Creates a 2-column grid */
-  gap: 1.5em; /* The space between the cards */
-}
-
-/* Styling for each individual statistic card */
-.stat-card {
-  background-color: #333;
-  padding: 1.5em;
-  border-radius: 15px;
-  text-align: center;
-}
-
-/* The big, bold number in the card */
-.stat-value {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #4dff91;
-  margin-bottom: 0.1em;
-}
-
-/* The smaller text label below the number */
-.stat-label {
-  font-size: 1rem;
-  color: #ccc;
 }

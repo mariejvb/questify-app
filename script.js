@@ -37,6 +37,28 @@ document.addEventListener('DOMContentLoaded', () => {
     //  3. CORE FUNCTIONS
     // =================================
 
+    // Handles the deletion of a main quest from the Quest Log.
+    function handleDeleteQuest(questId) {
+        // A confirmation dialog is crucial for destructive actions.
+        const isConfirmed = confirm("Are you sure you want to delete this quest? This cannot be undone.");
+
+        if (isConfirmed) {
+            // Filters the main quests array, keeping everything EXCEPT the quest with the matching ID.
+            quests = quests.filter(q => q.id !== questId);
+
+            // If the deleted quest was the currently active one, reset the active view.
+            if (activeQuestId === questId) {
+                activeQuestId = null;
+            }
+
+            // Save the new state and re-render the entire UI.
+            saveState();
+            renderQuestLog();
+            displayActiveQuest();
+            showToast("Quest deleted.");
+        }
+    }
+
     /**
      * Saves the current application state to the browser's Local Storage.
      * This allows the user's progress to persist between sessions.
@@ -217,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // The 'fetch' API is used to send a POST request to the Python backend.
-            const response = await fetch('/generate-quests', {
+            const response = await fetch('http://127.0.0.1:5000/generate-quests', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ goal: goal }),
@@ -319,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshButton.disabled = true;
         refreshButton.textContent = '...';
         try {
-            const response = await fetch('/refresh-quest', {
+            const response = await fetch('http://127.0.0.1:5000/refresh-quest', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -429,28 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
             levelUpModal.classList.add('hidden'); // Just hide it.
         }
     });
-
-    //  Handles the deletion of a main quest from the Quest Log.
-    function handleDeleteQuest(questId) {
-        // A confirmation dialog is crucial for destructive actions.
-        const isConfirmed = confirm("Are you sure you want to delete this quest? This cannot be undone.");
-
-        if (isConfirmed) {
-            // Filters the main quests array, keeping everything EXCEPT the quest with the matching ID.
-            quests = quests.filter(q => q.id !== questId);
-
-            // If the deleted quest was the currently active one, reset the active view.
-            if (activeQuestId === questId) {
-                activeQuestId = null;
-            }
-
-            // Save the new state and re-render the entire UI.
-            saveState();
-            renderQuestLog();
-            displayActiveQuest();
-            showToast("Quest deleted.");
-        }
-    }
 
     // =================================
     //  5. INITIAL LOAD
