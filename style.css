@@ -89,7 +89,7 @@ body.log-collapsed .log-toggle-button {
 }
 
 body.log-collapsed #main-content {
-  margin-left: 50px; /* When collapsed, the content only needs space for the handle. */
+  margin-left: 0;
 }
 
 body.log-collapsed .caret {
