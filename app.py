@@ -10,7 +10,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# load_dotenv() reads the .env file and loads the environment variables (like the API key)
+# load_dotenv() reads the .env file and loads environment variables (like the API key)
 # into the application's environment. This is a secure way to handle secret keys.
 load_dotenv()
 
