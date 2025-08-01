@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // The 'fetch' API is used to send a POST request to the Python backend.
-            const response = await fetch('/generate-quests', {
+            const response = await fetch('/api/generate-quests', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ goal: goal }),
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshButton.disabled = true;
         refreshButton.textContent = '...';
         try {
-            const response = await fetch('/refresh-quest', {
+            const response = await fetch('/api/refresh-quest', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
